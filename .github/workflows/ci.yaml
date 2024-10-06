@@ -51,7 +51,7 @@ jobs:
       - name: Init project
         run: uv init --app
       - name: Install dependencies
-        run: cat requirements.txt | xargs -n 1 uv pip install || true
+        run: cat requirements.txt | xargs -n 1 uv pip install --system || true
       - name: Freeze dependencies
         run: uv pip freeze > uv-freeze.txt
       - name: Upload freeze
