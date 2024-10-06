@@ -15,6 +15,11 @@ CLICK_HOST = 'https://clickpy-clickhouse.clickhouse.com/?user=play'
 CLICK_PARAMS = {'user': 'play'}
 CLICK_QUERY = 'SELECT project FROM pypi.pypi_downloads GROUP BY project ORDER BY sum(count) DESC LIMIT %s FORMAT JSONCompactColumns'
 
+BROKEN_MODULES = {
+    'apache-beam': 'https://github.com/astral-sh/uv/issues/3078'
+}
+
+
 PYPI_API_BASE_URL = 'https://pypi.org'
 
 
@@ -47,7 +52,11 @@ async def consumer(q: asyncio.Queue, requirement: str):
             msg = await q.get()
 
             name, latest_version = msg
-            fd.write(f'{name}<={latest_version}\n')
+
+            if reasone := BROKEN_MODULES.get(name):
+                fd.write(f'# {name}<={latest_version} # {reasone}\n')
+            else:
+                fd.write(f'{name}<={latest_version}\n')
             q.task_done()
 
 
