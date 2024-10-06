@@ -16,7 +16,9 @@ CLICK_PARAMS = {'user': 'play'}
 CLICK_QUERY = 'SELECT project FROM pypi.pypi_downloads GROUP BY project ORDER BY sum(count) DESC LIMIT %s FORMAT JSONCompactColumns'
 
 BROKEN_MODULES = {
-    'apache-beam': 'https://github.com/astral-sh/uv/issues/3078'
+    'apache-beam': 'https://github.com/astral-sh/uv/issues/3078',
+    'awscli': 'The pip is having problems with awscli, see '
+              'https://github.com/alphavector/all/actions/runs/11203830224/job/31141517215',
 }
 
 
