@@ -498,3 +498,4 @@ secretstorage<=3.3.3
 markupsafe<=2.1.5
 wcwidth<=0.2.13
 pydantic<=2.9.2
+
