@@ -19,6 +19,12 @@ BROKEN_MODULES = {
     'apache-beam': 'https://github.com/astral-sh/uv/issues/3078',
     'awscli': 'The pip is having problems with awscli, see '
               'https://github.com/alphavector/all/actions/runs/11203830224/job/31141517215',
+    'awscli-cwlogs': 'The pip is having problems with awscli, see '
+              'https://github.com/alphavector/all/actions/runs/11203830224/job/31141517215',
+    'thrift': 'The uv has problems with thrift at a certain dependency order '
+              '(https://github.com/alphavector/all/actions/runs/11204390601/job/31142712430)'
+              ', but the 1 time pass executed successfully '
+              'https://github.com/alphavector/all/actions/runs/11203830224/job/31141517284#step:5:569'
 }
 
 
