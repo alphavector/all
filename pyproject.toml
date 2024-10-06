@@ -9,3 +9,6 @@ dependencies = [
     "more-itertools>=10.5.0",
     "tqdm>=4.66.5",
 ]
+
+[tool.uv.workspace]
+members = ["simple-uv"]
