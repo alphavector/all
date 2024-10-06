@@ -23,13 +23,13 @@ jobs:
           cache: 'pip'
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Freeze dependencies
-        run: pip freeze | awk '{print tolower($0)}' > pip-freeze.txt
-      - name: Upload freeze
+      - name: Lock dependencies
+        run: pip freeze | awk '{print tolower($0)}' > pip-lock.txt
+      - name: Upload lock
         uses: actions/upload-artifact@v4
         with:
-          name: pip-freeze
-          path: pip-freeze.txt
+          name: pip-lock
+          path: pip-lock.txt
 
   uv:
     runs-on: ubuntu-latest
@@ -48,17 +48,13 @@ jobs:
           enable-cache: true
           cache-dependency-glob: ""
           version: 'latest'
-      - name: Init project
-        run: uv init --app
-      - name: Install dependencies
-        run: uv pip install --system -r requirements.txt
       - name: Freeze dependencies
-        run: uv pip freeze > uv-freeze.txt
+        run: uv pip compile requirements.txt -o uv-lock.txt
       - name: Upload freeze
         uses: actions/upload-artifact@v4
         with:
-          name: uv-freeze
-          path: uv-freeze.txt
+          name: uv-lock
+          path: uv-lock.txt
 
   diff:
     runs-on: ubuntu-latest
@@ -69,4 +65,4 @@ jobs:
           path: artifacts
           merge-multiple: true
       - name: Show diff
-        run: diff -u artifacts/uv-freeze.txt artifacts/pip-freeze.txt || true
+        run: diff -u artifacts/uv-lock.txt artifacts/pip-lock.txt || true
