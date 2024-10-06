@@ -20,8 +20,6 @@ jobs:
         with:
           python-version: '3.12.7'
           cache: 'pip'
-      - name: Upgrade pip
-        run: python -m pip install --upgrade pip
       - name: Install dependencies
         run: cat requirements.txt | xargs -n 1 pip install --timeout=10 || true
       - name: Freeze dependencies
@@ -70,4 +68,4 @@ jobs:
           path: artifacts
           merge-multiple: true
       - name: Show diff
-        run: diff uv-freeze.txt pip-freeze.txt
+        run: diff artifacts/uv-freeze.txt artifacts/pip-freeze.txt
