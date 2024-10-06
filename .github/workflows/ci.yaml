@@ -46,7 +46,7 @@ jobs:
       - uses: astral-sh/setup-uv@v3
         with:
           enable-cache: true
-          cache-dependency-glob: 'requirements.txt'
+          cache-dependency-glob: ""
           version: 'latest'
       - name: Init project
         run: uv init --app
