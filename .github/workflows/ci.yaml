@@ -22,7 +22,7 @@ jobs:
           python-version: '3.12.7'
           cache: 'pip'
       - name: Install dependencies
-        run: cat requirements.txt | xargs -n 1 pip install --timeout=10 || true
+        run: pip install -r requirements.txt
       - name: Freeze dependencies
         run: pip freeze > pip-freeze.txt
       - name: Upload freeze
@@ -51,7 +51,7 @@ jobs:
       - name: Init project
         run: uv init --app
       - name: Install dependencies
-        run: cat requirements.txt | xargs -n 1 uv pip install --system || true
+        run: uv pip install --system -r requirements.txt
       - name: Freeze dependencies
         run: uv pip freeze > uv-freeze.txt
       - name: Upload freeze
@@ -69,4 +69,4 @@ jobs:
           path: artifacts
           merge-multiple: true
       - name: Show diff
-        run: diff artifacts/uv-freeze.txt artifacts/pip-freeze.txt
+        run: diff -u artifacts/uv-freeze.txt artifacts/pip-freeze.txt || true
