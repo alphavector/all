@@ -11,7 +11,10 @@ from more_itertools import divide
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-SERIAL_FILE = 'https://raw.githubusercontent.com/pypi-data/pypi-json-data/refs/heads/main/release_data/serials.json'
+CLICK_HOST = 'https://clickpy-clickhouse.clickhouse.com/?user=play'
+CLICK_PARAMS = {'user': 'play'}
+CLICK_QUERY = 'SELECT project FROM pypi.pypi_downloads GROUP BY project ORDER BY sum(count) DESC LIMIT 100 FORMAT JSONCompactColumns'
+
 PYPI_API_BASE_URL = 'https://pypi.org'
 
 
@@ -49,13 +52,13 @@ async def consumer(q: asyncio.Queue, output: str):
 
 
 async def generator(workers, output: str):
-    log.info('Download serial.json')
+    log.info('Download top modules')
     async with aiohttp.ClientSession() as session:
-        async with session.get(SERIAL_FILE) as resp:
+        async with session.get(CLICK_HOST, params=CLICK_PARAMS, data=CLICK_QUERY) as resp:
             assert resp.status == 200
             data: dict = await resp.json(content_type='text/plain')
 
-    packages = data.keys()
+    packages = data[0]
     total = len(packages)
     log.info('total: %s', total)
 
