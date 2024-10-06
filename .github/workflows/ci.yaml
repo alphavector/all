@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Freeze dependencies
-        run: pip freeze > pip-freeze.txt
+        run: pip freeze | awk '{print tolower($0)}' > pip-freeze.txt
       - name: Upload freeze
         uses: actions/upload-artifact@v4
         with:
