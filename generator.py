@@ -41,8 +41,8 @@ async def get_latest_version(pbar: tqdm, q: asyncio.Queue, batch: Sequence[str])
     pbar.close()
 
 
-async def consumer(q: asyncio.Queue, output: str):
-    with open(output, 'w') as fd:
+async def consumer(q: asyncio.Queue, requirement: str):
+    with open(requirement, 'w') as fd:
         while True:
             msg = await q.get()
 
@@ -51,7 +51,7 @@ async def consumer(q: asyncio.Queue, output: str):
             q.task_done()
 
 
-async def generator(workers: int, output: str, limit: int = 100):
+async def generator(workers: int, requirement: str, limit: int = 100):
     log.info('Download top %s modules', limit)
     async with aiohttp.ClientSession() as session:
         async with session.get(CLICK_HOST, params=CLICK_PARAMS, data=CLICK_QUERY % (limit,)) as resp:
@@ -68,7 +68,7 @@ async def generator(workers: int, output: str, limit: int = 100):
     pbars = [tqdm(total=len(batch), position=i, desc=f'worker {i}', unit='pkgs') for i, batch in
              enumerate(batches)]
 
-    asyncio.create_task(consumer(q, output=output))  # noqa
+    asyncio.create_task(consumer(q, requirement=requirement))  # noqa
 
     workers = (
         get_latest_version(
@@ -86,7 +86,7 @@ async def generator(workers: int, output: str, limit: int = 100):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-w', '--workers', type=int, default=100)
-    parser.add_argument('-o', '--output', type=str, default='requirements.txt')
+    parser.add_argument('-r', '--requirement', type=str, default='requirements.txt')
     parser.add_argument('-l', '--limit', type=int, default=100)
     args = vars(parser.parse_args())
 
