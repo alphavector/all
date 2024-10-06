@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 
 CLICK_HOST = 'https://clickpy-clickhouse.clickhouse.com/?user=play'
 CLICK_PARAMS = {'user': 'play'}
-CLICK_QUERY = 'SELECT project FROM pypi.pypi_downloads GROUP BY project ORDER BY sum(count) DESC LIMIT 100 FORMAT JSONCompactColumns'
+CLICK_QUERY = 'SELECT project FROM pypi.pypi_downloads GROUP BY project ORDER BY sum(count) DESC LIMIT %s FORMAT JSONCompactColumns'
 
 PYPI_API_BASE_URL = 'https://pypi.org'
 
@@ -51,10 +51,10 @@ async def consumer(q: asyncio.Queue, output: str):
             q.task_done()
 
 
-async def generator(workers, output: str):
-    log.info('Download top modules')
+async def generator(workers: int, output: str, limit: int = 100):
+    log.info('Download top %s modules', limit)
     async with aiohttp.ClientSession() as session:
-        async with session.get(CLICK_HOST, params=CLICK_PARAMS, data=CLICK_QUERY) as resp:
+        async with session.get(CLICK_HOST, params=CLICK_PARAMS, data=CLICK_QUERY % (limit,)) as resp:
             assert resp.status == 200
             data: dict = await resp.json(content_type='text/plain')
 
@@ -87,6 +87,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-w', '--workers', type=int, default=100)
     parser.add_argument('-o', '--output', type=str, default='requirements.txt')
+    parser.add_argument('-l', '--limit', type=int, default=100)
     args = vars(parser.parse_args())
 
     asyncio.run(generator(**args))
