@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - requirements.txt
+      - .github/workflows/ci.yaml
 
 jobs:
   pip:
