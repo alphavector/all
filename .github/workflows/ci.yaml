@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  pip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            requirements.txt
+          sparse-checkout-cone-mode: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.7'
+          cache: 'pip'
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+      - name: Install dependencies
+        run: cat requirements.txt | xargs -n 1 pip install
+
+  uv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            requirements.txt
+          sparse-checkout-cone-mode: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.7'
+      - uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+          version: 'latest'
+      - name: Init project
+        run: uv init --app
+      - name: Install dependencies
+        run: cat requirements.txt | xargs -n 1 uv add
