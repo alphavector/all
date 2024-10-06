@@ -24,7 +24,8 @@ BROKEN_MODULES = {
     'thrift': 'The uv has problems with thrift at a certain dependency order '
               '(https://github.com/alphavector/all/actions/runs/11204390601/job/31142712430)'
               ', but the 1 time pass executed successfully '
-              'https://github.com/alphavector/all/actions/runs/11203830224/job/31141517284#step:5:569'
+              'https://github.com/alphavector/all/actions/runs/11203830224/job/31141517284#step:5:569',
+    'pycrypto': 'pip: src/_fastmath.c:33:10: fatal error: longintrepr.h: No such file or directory'
 }
 
 
