@@ -42,6 +42,7 @@ BROKEN_MODULES = {
     'tensorflow-estimator': '',
     'tensorflow-io-gcs-filesystem': '',
     'tensorflow-model-analysis': '',
+    'flask-appbuilder': 'flask-appbuilder==2.1.4 has a bug',
 }
 
 
