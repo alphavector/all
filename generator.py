@@ -78,7 +78,7 @@ async def consumer(q: asyncio.Queue, requirement: str):
 
             name, latest_version = msg
 
-            if reasone := BROKEN_MODULES.get(name):
+            if (reasone := BROKEN_MODULES.get(name)) is not None:
                 fd.write(f'# {name}<={latest_version} # {reasone}\n')
             else:
                 fd.write(f'{name}<={latest_version}\n')
