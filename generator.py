@@ -33,7 +33,15 @@ BROKEN_MODULES = {
     'tfx-bsl': 'Ignored the following versions that require a different python version: ... Requires-Python',
     'tensorflow-data-validation': 'Ignored the following versions that require a different python version: ... Requires-Python',
     'pywin32': 'ignore windows modules',
-    'tensorflow-text': 'No matching distribution found for tensorflow-text<=2.17.0'
+    'tensorflow-text': 'No matching distribution found for tensorflow-text<=2.17.0',
+    'tensorflow-addons': '',
+    'tensorflow-metadata': '',
+    'tensorflow-transform': '',
+    'tensorflow-hub': '',
+    'tensorflow-serving-api': '',
+    'tensorflow-estimator': '',
+    'tensorflow-io-gcs-filesystem': '',
+    'tensorflow-model-analysis': '',
 }
 
 
