@@ -3,6 +3,7 @@ import asyncio
 import http
 import logging
 from typing import Sequence
+import re
 
 import aiohttp
 from tqdm import tqdm
@@ -33,112 +34,15 @@ BROKEN_MODULES = {
     'tfx-bsl': 'Ignored the following versions that require a different python version: ... Requires-Python',
     'tensorflow-data-validation': 'Ignored the following versions that require a different python version: ... Requires-Python',
     'pywin32': 'ignore windows modules',
-    'tensorflow-text': 'No matching distribution found for tensorflow-text<=2.17.0',
-    'tensorflow-addons': '',
-    'tensorflow-metadata': '',
-    'tensorflow-transform': '',
-    'tensorflow-hub': '',
-    'tensorflow-serving-api': '',
-    'tensorflow-estimator': '',
-    'tensorflow-io-gcs-filesystem': '',
-    'tensorflow-model-analysis': '',
+
+    # tensorflow
+    re.compile(r'^tensorflow.*'): ' tensorflow-text: No matching distribution found for tensorflow-text<=2.17.0',
     'flask-appbuilder': 'flask-appbuilder==2.1.4 has a bug',
     'bokeh': "AttributeError: module 'configparser' has no attribute 'SafeConfigParser'. Did you mean: 'RawConfigParser'?, "
              "uv did it, but the others didn't, very strange.",
 
     # Azure
-    'azure-cli': 'jsmin==2.2.2: error in jsmin setup command: use_2to3 is invalid.',
-    'azure-mgmt-core': '',
-    'azure-mgmt-keyvault': '',
-    'azure-mgmt-storage': '',
-    'azureml-core': '',
-    'azure-mgmt-sql': '',
-    'azure-mgmt-web': '',
-    'azure-mgmt-cognitiveservices': '',
-    'azure-mgmt-rdbms': '',
-    'azure-mgmt-containerregistry': '',
-    'azure-mgmt-datalake-store': '',
-    'azure-mgmt-batchai': '',
-    'azure-appconfiguration': '',
-    'azure-mgmt-media': '',
-    'azure-cli-telemetry': '',
-    'azure-mgmt-iothub': '',
-    'azure-cli-core': '',
-    'azure-mgmt-recoveryservices': '',
-    'azure-keyvault-keys': '',
-    'azure-mgmt-datamigration': '',
-    'azure-mgmt-signalr': '',
-    'azure-mgmt-cosmosdb': '',
-    'azure-mgmt-loganalytics': '',
-    'azure-mgmt-batch': '',
-    'azure-mgmt-nspkg': '',
-    'azure-mgmt-eventgrid': '',
-    'azure-mgmt-hdinsight': '',
-    'azure-kusto-data': '',
-    'azure-eventgrid': '',
-    'azure-keyvault': '',
-    'azure-mgmt-datafactory': '',
-    'azure-mgmt-devtestlabs': '',
-    'azure-mgmt-redis': '',
-    'azure-mgmt-managementgroups': '',
-    'azure-mgmt-maps': '',
-    'azure-mgmt-containerservice': '',
-    'azure-devops': '',
-    'azure-mgmt-dns': '',
-    'azure-mgmt-network': '',
-    'azure-eventhub': '',
-    'azure-cosmosdb-nspkg': '',
-    'azure-mgmt-policyinsights': '',
-    'azure-mgmt-eventhub': '',
-    'azure-mgmt-recoveryservicesbackup': '',
-    'azureml-dataprep': '',
-    'azure-storage-blob': '',
-    'azure-mgmt-iotcentral': '',
-    'azure-mgmt-containerinstance': '',
-    'azure-storage-queue': '',
-    'azure-mgmt-monitor': '',
-    'azure-mgmt-compute': '',
-    'azure-mgmt-iothubprovisioningservices': '',
-    'azure-storage-file-share': '',
-    'azure-mgmt-authorization': '',
-    'opencensus-ext-azure': '',
-    'azure-mgmt-datalake-nspkg': '',
-    'azure-core': '',
-    'azure-mgmt-marketplaceordering': '',
-    'azure-servicebus': '',
-    'azure-mgmt-applicationinsights': '',
-    'azure-multiapi-storage': '',
-    'azure-cosmos': '',
-    'azure-mgmt-servicefabric': '',
-    'azure-storage-file-datalake': '',
-    'azure-storage-common': '',
-    'azure-datalake-store': '',
-    'azure-mgmt-consumption': '',
-    'azure-mgmt-cdn': '',
-    'azure-cosmosdb-table': '',
-    'azure-mgmt-advisor': '',
-    'azure-mgmt-search': '',
-    'azure-batch': '',
-    'azure-synapse-artifacts': '',
-    'azure-mgmt-msi': '',
-    'azure-mgmt-billing': '',
-    'azure-mgmt-resource': '',
-    'azure-graphrbac': '',
-    'azure-loganalytics': '',
-    'azure-keyvault-secrets': '',
-    'azure-nspkg': '',
-    'azure-storage-file': '',
-    'azure-mgmt-trafficmanager': '',
-    'azure-mgmt-reservations': '',
-    'azure-mgmt-servicebus': '',
-    'azure-mgmt-relay': '',
-    'azure-mgmt-datalake-analytics': '',
-    'azure-kusto-ingest': '',
-    'azure-data-tables': '',
-    'azure-keyvault-certificates': '',
-    'azure-identity': '',
-    'azure-common': '',
-
+    re.compile(r'^azure.*'): 'azure-cli: jsmin==2.2.2: error in jsmin setup command: use_2to3 is invalid.',
 }
 
 
@@ -174,8 +78,14 @@ async def consumer(q: asyncio.Queue, requirement: str):
             msg = await q.get()
 
             name, latest_version = msg
+            skip = False
 
-            if (reasone := BROKEN_MODULES.get(name)) is not None:
+            for broken_name, reasone in BROKEN_MODULES.items():
+                if isinstance(broken_name, re.Pattern) and broken_name.match(name) or name == broken_name:
+                    skip = True
+                    continue
+
+            if skip:
                 fd.write(f'# {name}<={latest_version} # {reasone}\n')
             else:
                 fd.write(f'{name}<={latest_version}\n')
