@@ -46,7 +46,7 @@ BROKEN_MODULES = {
     'pyyaml': 'PyYAML-5.4.1: AttributeError: cython_sources',
     'jsondiff': 'PyYAML-5.4.1: AttributeError: cython_sources',
     'pre-commit': 'PyYAML-5.4.1: AttributeError: cython_sources',
-    'great_expectations': "AttributeError: module 'configparser' has no attribute 'SafeConfigParser'. Did you mean: 'RawConfigParser'?",
+    'great-expectations': "AttributeError: module 'configparser' has no attribute 'SafeConfigParser'. Did you mean: 'RawConfigParser'?",
 }
 
 
