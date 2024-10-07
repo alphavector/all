@@ -72,8 +72,9 @@ async def consumer(q: asyncio.Queue, requirement: str):
 
 async def generator(workers: int, requirement: str, limit: int = 100):
     log.info('Download top %s modules', limit)
+    actual_limit = limit + len(BROKEN_MODULES)
     async with aiohttp.ClientSession() as session:
-        async with session.get(CLICK_HOST, params=CLICK_PARAMS, data=CLICK_QUERY % (limit,)) as resp:
+        async with session.get(CLICK_HOST, params=CLICK_PARAMS, data=CLICK_QUERY % (actual_limit,)) as resp:
             assert resp.status == 200
             data: dict = await resp.json(content_type='text/plain')
 
