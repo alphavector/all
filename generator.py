@@ -28,7 +28,8 @@ BROKEN_MODULES = {
     'pycrypto': 'pip: src/_fastmath.c:33:10: fatal error: longintrepr.h: No such file or directory',
     'backports-zoneinfo': 'pip: lib/zoneinfo_module.c:600:19: error: ‘_PyLong_One’ undeclared (first use in this function); did you mean ‘_PyLong_New’?',
     'sklearn': "The 'sklearn' PyPI package is deprecated, use 'scikit-learn' rather than 'sklearn' for pip commands.",
-    'pathtools': "ModuleNotFoundError: No module named 'imp'"
+    'pathtools': "ModuleNotFoundError: No module named 'imp'",
+    'functools32': 'This backport is for Python 2.7 only.',
 }
 
 
