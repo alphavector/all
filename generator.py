@@ -43,6 +43,8 @@ BROKEN_MODULES = {
     'tensorflow-io-gcs-filesystem': '',
     'tensorflow-model-analysis': '',
     'flask-appbuilder': 'flask-appbuilder==2.1.4 has a bug',
+    'bokeh': "AttributeError: module 'configparser' has no attribute 'SafeConfigParser'. Did you mean: 'RawConfigParser'?, "
+             "uv did it, but the others didn't, very strange."
 }
 
 
