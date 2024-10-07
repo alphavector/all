@@ -31,6 +31,7 @@ BROKEN_MODULES = {
     'pathtools': "ModuleNotFoundError: No module named 'imp'",
     'functools32': 'This backport is for Python 2.7 only.',
     'tfx-bsl': 'Ignored the following versions that require a different python version: ... Requires-Python',
+    'tensorflow-data-validation': 'Ignored the following versions that require a different python version: ... Requires-Python',
 }
 
 
