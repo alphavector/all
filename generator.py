@@ -26,7 +26,8 @@ BROKEN_MODULES = {
               ', but the 1 time pass executed successfully '
               'https://github.com/alphavector/all/actions/runs/11203830224/job/31141517284#step:5:569',
     'pycrypto': 'pip: src/_fastmath.c:33:10: fatal error: longintrepr.h: No such file or directory',
-    'backports-zoneinfo': 'pip: lib/zoneinfo_module.c:600:19: error: ‘_PyLong_One’ undeclared (first use in this function); did you mean ‘_PyLong_New’?'
+    'backports-zoneinfo': 'pip: lib/zoneinfo_module.c:600:19: error: ‘_PyLong_One’ undeclared (first use in this function); did you mean ‘_PyLong_New’?',
+    'sklearn': "The 'sklearn' PyPI package is deprecated, use 'scikit-learn' rather than 'sklearn' for pip commands."
 }
 
 
