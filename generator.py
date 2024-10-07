@@ -30,6 +30,7 @@ BROKEN_MODULES = {
     'sklearn': "The 'sklearn' PyPI package is deprecated, use 'scikit-learn' rather than 'sklearn' for pip commands.",
     'pathtools': "ModuleNotFoundError: No module named 'imp'",
     'functools32': 'This backport is for Python 2.7 only.',
+    'tfx-bsl': 'Ignored the following versions that require a different python version: ... Requires-Python',
 }
 
 
