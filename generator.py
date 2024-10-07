@@ -32,6 +32,7 @@ BROKEN_MODULES = {
     'functools32': 'This backport is for Python 2.7 only.',
     'tfx-bsl': 'Ignored the following versions that require a different python version: ... Requires-Python',
     'tensorflow-data-validation': 'Ignored the following versions that require a different python version: ... Requires-Python',
+    'pywin32': 'ignore windows modules',
 }
 
 
