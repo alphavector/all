@@ -45,6 +45,7 @@ BROKEN_MODULES = {
     re.compile(r'^azure.*'): 'azure-cli: jsmin==2.2.2: error in jsmin setup command: use_2to3 is invalid.',
     'pyyaml': 'PyYAML-5.4.1: AttributeError: cython_sources',
     'jsondiff': 'PyYAML-5.4.1: AttributeError: cython_sources',
+    'pre-commit': 'PyYAML-5.4.1: AttributeError: cython_sources',
 }
 
 
