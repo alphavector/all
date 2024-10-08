@@ -43,12 +43,12 @@ BROKEN_MODULES = {
 
     # Azure
     re.compile(r'^azure.*'): 'azure-cli: jsmin==2.2.2: error in jsmin setup command: use_2to3 is invalid.',
-    'pyyaml': 'PyYAML-5.4.1: AttributeError: cython_sources',
-    'pyaml': 'PyYAML-5.4.1: AttributeError: cython_sources',
-    'jsondiff': 'PyYAML-5.4.1: AttributeError: cython_sources',
-    'pre-commit': 'PyYAML-5.4.1: AttributeError: cython_sources',
     'great-expectations': "AttributeError: module 'configparser' has no attribute 'SafeConfigParser'. Did you mean: 'RawConfigParser'?",
     'tornado': "tornado-5.1.1: Tornado requires an up-to-date SSL module. This means Python 2.7.9+ or 3.4+",
+}
+
+EXTERNAL_MODULES = {
+    'pyyaml': '!=6.0.0,!=5.4.0,!=5.4.1',  # pyyaml is broken with cython 3,
 }
 
 
@@ -93,6 +93,8 @@ async def consumer(q: asyncio.Queue, requirement: str):
 
             if skip:
                 fd.write(f'# {name}<={latest_version} # {reasone}\n')
+            elif (curstom_version := EXTERNAL_MODULES.get(name)) is not None:
+                fd.write(f'{name}{curstom_version}\n')
             else:
                 fd.write(f'{name}<={latest_version}\n')
             q.task_done()
