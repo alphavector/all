@@ -70,7 +70,7 @@ jobs:
           python-version: '3.12.7'
           cache: 'pip'
       - name: Install pip-tools
-        run: pip install pip-tools
+        run: pip install pip-tools==7.4.1
       - name: Lock dependencies
         run: pip-compile --no-header --no-annotate --strip-extras -v -o pip-compile-lock.txt requirements.txt
       - name: Upload lock
