@@ -47,6 +47,7 @@ BROKEN_MODULES = {
     'jsondiff': 'PyYAML-5.4.1: AttributeError: cython_sources',
     'pre-commit': 'PyYAML-5.4.1: AttributeError: cython_sources',
     'great-expectations': "AttributeError: module 'configparser' has no attribute 'SafeConfigParser'. Did you mean: 'RawConfigParser'?",
+    'tornado': "tornado-5.1.1: Tornado requires an up-to-date SSL module. This means Python 2.7.9+ or 3.4+",
 }
 
 
