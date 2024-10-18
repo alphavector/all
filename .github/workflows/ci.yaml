@@ -26,7 +26,7 @@ jobs:
           cache-dependency-glob: ""
           version: '0.4.24'
       - name: Freeze dependencies
-        run: while read dep; do echo "------ $dep ------" >> uv-lock.txt && uv pip compile <(echo "$dep") --color never --no-header --no-annotate --quiet &>> uv-lock.txt || true; done < requirements.txt
+        run: while read dep; do echo "------ $dep ------" >> uv-lock.txt && tail -n1 uv-lock.txt && uv pip compile <(echo "$dep") --color never --no-header --no-annotate --quiet &>> uv-lock.txt || true; done < requirements.txt
       - name: Upload freeze
         uses: actions/upload-artifact@v4
         if: always()
@@ -50,7 +50,7 @@ jobs:
       - name: Install pip-tools
         run: pip install pip-tools==7.4.1
       - name: Lock dependencies
-        run: while read dep; do echo "------ $dep ------" >> pip-compile-lock.txt && pip-compile -r <(echo "$dep") --no-color --no-header --no-annotate --quiet --strip-extras --output-file=- &>> pip-compile-lock.txt || true; done < requirements.txt
+        run: while read dep; do echo "------ $dep ------" >> pip-compile-lock.txt && tail -n1 pip-compile-lock.txt && pip-compile -r <(echo "$dep") --no-color --no-header --no-annotate --quiet --strip-extras --output-file=- &>> pip-compile-lock.txt || true; done < requirements.txt
       - name: Upload lock
         uses: actions/upload-artifact@v4
         if: always()
