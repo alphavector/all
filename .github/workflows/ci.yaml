@@ -8,29 +8,6 @@ on:
       - .github/workflows/ci.yaml
 
 jobs:
-  pip:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            requirements.txt
-          sparse-checkout-cone-mode: false
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12.7'
-          cache: 'pip'
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Lock dependencies
-        run: pip freeze | awk '{print tolower($0)}' > pip-lock.txt
-      - name: Upload lock
-        uses: actions/upload-artifact@v4
-        with:
-          name: pip-lock
-          path: pip-lock.txt
-
   uv:
     runs-on: ubuntu-latest
     steps:
@@ -47,9 +24,9 @@ jobs:
         with:
           enable-cache: true
           cache-dependency-glob: ""
-          version: '0.4.18'
+          version: '0.4.24'
       - name: Freeze dependencies
-        run: uv pip compile --no-header --no-annotate -v requirements.txt -o uv-lock.txt
+        run: cat requirements.txt | while read dep; do echo "------ $dep ------" >> uv-lock.txt && uv pip compile <(echo "$dep") --color never --no-header --no-annotate --quiet &>> uv-lock.txt; done
       - name: Upload freeze
         uses: actions/upload-artifact@v4
         with:
@@ -72,22 +49,9 @@ jobs:
       - name: Install pip-tools
         run: pip install pip-tools==7.4.1
       - name: Lock dependencies
-        run: pip-compile --no-header --no-annotate --strip-extras -v -o pip-compile-lock.txt requirements.txt
+        run: cat requirements.txt | while read dep; do echo "------ $dep ------" >> pip-compile-lock.txt && pip-compile -r <(echo "$dep") --no-color --no-header --no-annotate --quiet --strip-extras --output-file=- &>> pip-compile-lock.txt; done
       - name: Upload lock
         uses: actions/upload-artifact@v4
         with:
           name: pip-compile-lock
           path: pip-compile-lock.txt
-
-  diff:
-    runs-on: ubuntu-latest
-    needs: [ pip, uv, pip-compile ]
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-          merge-multiple: true
-      - name: Show diff uv & pip
-        run: diff -u artifacts/uv-lock.txt artifacts/pip-lock.txt || true
-      - name: Show diff uv & pip-compile
-        run: diff -u artifacts/uv-lock.txt artifacts/pip-compile-lock.txt || true
