@@ -29,6 +29,7 @@ jobs:
         run: while read dep; do echo "------ $dep ------" >> uv-lock.txt && uv pip compile <(echo "$dep") --color never --no-header --no-annotate --quiet &>> uv-lock.txt; done < requirements.txt
       - name: Upload freeze
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: uv-lock
           path: uv-lock.txt
@@ -52,6 +53,7 @@ jobs:
         run: while read dep; do echo "------ $dep ------" >> pip-compile-lock.txt && pip-compile -r <(echo "$dep") --no-color --no-header --no-annotate --quiet --strip-extras --output-file=- &>> pip-compile-lock.txt; done < requirements.txt
       - name: Upload lock
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: pip-compile-lock
           path: pip-compile-lock.txt
